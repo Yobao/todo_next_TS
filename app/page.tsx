@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import Container from "@/components/container";
 import Content from "./content";
 import LoadingButton from "@/components/ui/loading-button";
-import { Lists } from "@/types";
+import { List } from "@/types";
 import { LISTS } from "@/utils/calls";
 
 export default function Home() {
-   const [data, setData] = useState<Lists[]>();
+   const [data, setData] = useState<List[]>();
 
    useEffect(() => {
       LISTS.list().then((data) => setData(data));

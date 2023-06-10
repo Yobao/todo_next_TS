@@ -1,10 +1,10 @@
-export interface Lists {
+export interface List {
    name: string;
    description: string;
    id: string;
 }
 
-export interface Tasks {
+export interface Task {
    id: string;
    listId: string;
    name: string;

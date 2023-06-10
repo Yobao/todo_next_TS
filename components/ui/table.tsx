@@ -1,4 +1,13 @@
-const Table = () => {
+import { FC } from "react";
+
+import { Task } from "@/types";
+
+interface pageProps {
+   data: Task[];
+   header: string;
+}
+
+const Table: FC<pageProps> = ({ data, header }) => {
    return (
       <div className='overflow-x-auto'>
          <table className='table'>
@@ -115,16 +124,6 @@ const Table = () => {
                   </th>
                </tr>
             </tbody>
-            {/*"--------------------------------------------------------------------------"*/}
-            <tfoot>
-               <tr>
-                  <th></th>
-                  <th>Name</th>
-                  <th>Job</th>
-                  <th>Favorite Color</th>
-                  <th></th>
-               </tr>
-            </tfoot>
          </table>
       </div>
    );
