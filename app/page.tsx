@@ -2,11 +2,10 @@
 import { useEffect, useState } from "react";
 
 import Container from "@/components/container";
-import RootLayout from "./layout";
 import Content from "./content";
 import LoadingButton from "@/components/loading-button";
-import { Lists } from "./../types";
-import { LISTS } from "./../utils/calls";
+import { Lists } from "@/types";
+import { LISTS } from "@/utils/calls";
 
 export default function Home() {
    const [data, setData] = useState<Lists[]>();
@@ -25,6 +24,7 @@ export default function Home() {
                <hr className='h-px my-2 bg-gray-300 border-0 dark:bg-gray-700' />
             </div>
          </Container>
+
          <Content data={data} />
       </div>
    );
