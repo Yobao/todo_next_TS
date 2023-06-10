@@ -14,7 +14,7 @@ interface pageProps {
 const Content: FC<pageProps> = ({ data }) => {
    const router = useRouter();
 
-   const handleCardClick = (list) => {
+   const handleCardClick = (list: List) => {
       router.push(`/lists/${list.id}`);
    };
 

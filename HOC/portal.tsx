@@ -1,16 +1,29 @@
-/* import { useEffect, useState, useRef } from "react";
+"use client";
+import { FC, useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 
-function Portal({ children }) {
-  const ref = useRef(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    return () => setMounted(false);
-  }, []);
-
-  return mounted ? createPortal(children, document.querySelector("#modal-root")) : null;
+interface Props {
+   children: any;
 }
 
-export default Portal; */
+const Portal: React.FC<Props> = ({ children }) => {
+   const el = document.createElement("div");
+   const wrapper: React.RefObject<HTMLElement> = useRef(el);
+
+   useEffect(() => {
+      const current = wrapper.current as HTMLElement;
+      current.setAttribute("id", "overlay");
+      document.body.appendChild(current);
+
+      return () => {
+         document.body.removeChild(current);
+      };
+   }, []);
+
+   if (!wrapper.current) {
+      return <>{null}</>;
+   }
+   return createPortal(children, wrapper.current);
+};
+
+export default Portal;

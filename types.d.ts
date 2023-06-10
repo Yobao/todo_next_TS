@@ -12,3 +12,9 @@ export interface Task {
    dueDate: Date;
    status: string;
 }
+
+export interface TaskTableHeader {
+   key: string;
+   text: string;
+   component?: any;
+}
