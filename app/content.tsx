@@ -1,13 +1,20 @@
+import { FC } from "react";
 import { useRouter } from "next/navigation";
 import Container from "@/components/container";
 import Card from "@/components/card";
 
+import { List } from "@/types";
+
 const images = ["/work.jpg", "/freeTime.jpg", "/others.jpg"];
 
-export default function Content({ data }) {
+interface pageProps {
+   data: List[];
+}
+
+const Content: FC<pageProps> = ({ data }) => {
    const router = useRouter();
 
-   const handleCardClick = (list) => {
+   const handleCardClick = (list: List) => {
       router.push(`/lists/${list.id}`);
    };
 
@@ -27,4 +34,6 @@ export default function Content({ data }) {
          </>
       </Container>
    );
-}
+};
+
+export default Content;
