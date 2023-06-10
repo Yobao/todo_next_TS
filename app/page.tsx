@@ -1,22 +1,31 @@
 "use client";
 import { useEffect, useState } from "react";
-import work from "../public/work.jpg";
+
+import Container from "@/components/container";
+import RootLayout from "./layout";
+import Content from "./content";
+import LoadingButton from "@/components/loading-button";
+import { Lists } from "./../types";
+import { LISTS } from "./../utils/calls";
 
 export default function Home() {
-   const [data, setData] = useState();
+   const [data, setData] = useState<Lists[]>();
+
+   useEffect(() => {
+      LISTS.list().then((data) => setData(data));
+   }, []);
+
+   if (!data) return <LoadingButton />;
 
    return (
-      <div className='card w-80 bg-base-100 shadow-xl hover:scale-110 transition delay-150 duration-300 ease-in-out cursor-pointer'>
-         <figure>
-            <img src='/work.jpg' alt='work' />
-         </figure>
-         <div className='card-body'>
-            <h2 className='card-title'>Shoes!</h2>
-            <p>If a dog chews shoes whose shoes does he choose?</p>
-            <div className='card-actions justify-end'>
-               <button className='btn btn-primary'>Buy Now</button>
+      <div className='my-8 mx-8'>
+         <Container horizontal={"left"}>
+            <div className='flex-1'>
+               <h2 className='text-4xl font-extrabold dark:text-white mx-4'>Todo Lists</h2>
+               <hr className='h-px my-2 bg-gray-300 border-0 dark:bg-gray-700' />
             </div>
-         </div>
+         </Container>
+         <Content data={data} />
       </div>
    );
 }
