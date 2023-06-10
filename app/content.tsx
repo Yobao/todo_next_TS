@@ -7,15 +7,15 @@ const images = ["/work.jpg", "/freeTime.jpg", "/others.jpg"];
 export default function Content({ data }) {
    const router = useRouter();
 
-   const handleCardClick = () => {
-      router.push("test");
+   const handleCardClick = (list) => {
+      router.push(`/lists/${list.id}`);
    };
 
    return (
       <Container>
          <>
             {data.map((list, index) => (
-               <Card key={list.name} title={list.name} onClick={handleCardClick}>
+               <Card key={list.name} title={list.name} onClick={() => handleCardClick(list)}>
                   <div className=''>
                      <figure>
                         <img src={images.at(index)} alt='car!' />
