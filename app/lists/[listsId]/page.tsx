@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { FC } from "react";
 
+import Table from "@/components/ui/table";
 import { TASKS } from "@/utils/calls";
 import { Tasks } from "@/types";
 
@@ -21,7 +21,7 @@ const TaskList: FC<pageProps> = ({ params }) => {
 
    return (
       <div>
-         <p>TEST</p>
+         <Table />
       </div>
    );
 };

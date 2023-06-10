@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import Container from "@/components/container";
 import Content from "./content";
-import LoadingButton from "@/components/loading-button";
+import LoadingButton from "@/components/ui/loading-button";
 import { Lists } from "@/types";
 import { LISTS } from "@/utils/calls";
 
