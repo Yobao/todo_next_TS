@@ -14,19 +14,26 @@ const requests = {
    GET: async (slug: string) => {
       const options = { method: "GET", headers };
       const data = await fetchData(slug, options);
+
       return data;
    },
-   POST: async (slug: string) => {
-      const options = { method: "POST", headers };
+   POST: async (slug: string, body: object) => {
+      const options = { method: "POST", headers, body: JSON.stringify(body) };
       const data = await fetchData(slug, options);
+
+      return data;
    },
-   PUT: async (slug: string) => {
-      const options = { method: "PUT", headers };
+   PUT: async (slug: string, body: object) => {
+      const options = { method: "PUT", headers, body: JSON.stringify(body) };
       const data = await fetchData(slug, options);
+
+      return data;
    },
    DELETE: async (slug: string) => {
       const options = { method: "DELETE", headers };
       const data = await fetchData(slug, options);
+
+      return data;
    },
 };
 
