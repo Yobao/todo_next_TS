@@ -15,7 +15,9 @@ const Table: FC<pageProps> = ({ data, header }) => {
             <thead>
                <tr>
                   {header.map(({ key, text }) => (
-                     <th key={key}>{text}</th>
+                     <th key={key} className='text-center'>
+                        {text}
+                     </th>
                   ))}
                </tr>
             </thead>
@@ -28,11 +30,13 @@ const Table: FC<pageProps> = ({ data, header }) => {
                   >
                      {header.map((cell) =>
                         cell?.component ? (
-                           <th key={JSON.stringify(cell)}>
+                           <th key={JSON.stringify(cell)} className='text-center'>
                               {cell.component({ id: row.id, value: row[cell.key] })}
                            </th>
                         ) : (
-                           <td key={JSON.stringify(cell)}>{row[cell.key]}</td>
+                           <td key={JSON.stringify(cell)} className='text-center'>
+                              {row[cell.key]}
+                           </td>
                         )
                      )}
                   </tr>

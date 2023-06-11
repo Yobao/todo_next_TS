@@ -23,6 +23,7 @@ import { TASKS } from "@/utils/calls";
 import { Task } from "@/types";
 import { TASK } from "@/constants/constants";
 import { convertDate } from "@/utils/utils";
+import DetailModal from "./detail-modal";
 
 interface pageProps {
    params: { listsId: string };
@@ -41,7 +42,7 @@ const tableHeader = [
       component: function (data: TaskActions) {
          return (
             <button
-               onClick={(e) => this.action(data.id)}
+               onClick={() => this.action(data.id)}
                className='hover:scale-125 transition delay-100 duration-300 ease-in-out cursor-pointer'
             >
                <Icon
@@ -110,6 +111,10 @@ const TaskList: FC<pageProps> = ({ params }) => {
       if (tasks) setData(tasks);
    }, []);
 
+   useEffect(() => {
+      handleDataLoad();
+   }, []);
+
    const handleSubmit = async (data: object) => {
       const taskCreated = await TASKS.create(params.listsId, {
          ...data,
@@ -120,10 +125,6 @@ const TaskList: FC<pageProps> = ({ params }) => {
          handleDataLoad();
       }
    };
-
-   useEffect(() => {
-      handleDataLoad();
-   }, []);
 
    const handleShowCreateModal = useCallback(() => {
       setCreateModal(!createModal);
@@ -142,13 +143,14 @@ const TaskList: FC<pageProps> = ({ params }) => {
       setShowFilterBar(!showFilterBar);
    };
 
-   const handleSetTaskAsDone = async (taskId?: string) => {
+   const handleUpdateTask = async (taskId?: string) => {
       const updatedTask = await TASKS.update(params.listsId, taskId, { status: TASK.status.done });
       if (updatedTask) handleDataLoad();
    };
 
    const handleTaskDetail = (taskId?: string) => {
-      console.log("DETAIL", taskId);
+      setSelectedTaskId(taskId);
+      handleShowDetailModal();
    };
 
    const handleDeleteTask = async () => {
@@ -177,7 +179,7 @@ const TaskList: FC<pageProps> = ({ params }) => {
 
    const tableHeaderWithAction = getTableHeader(
       tableHeader,
-      handleSetTaskAsDone,
+      handleUpdateTask,
       handleTaskDetail,
       handleShowDeleteModal
    );
@@ -195,6 +197,13 @@ const TaskList: FC<pageProps> = ({ params }) => {
             />
          )}
 
+         {detailModal && (
+            <DetailModal
+               closeModal={handleShowDetailModal}
+               data={data.find((task) => task.id === selectedTaskId)}
+            />
+         )}
+
          <div className='my-8 mx-8 z-1'>
             <Container>
                <FilterProvider data={data} activeFilters={activeFilters}>
@@ -204,7 +213,7 @@ const TaskList: FC<pageProps> = ({ params }) => {
                            <div className=''>
                               <button
                                  onClick={handleShowCreateModal}
-                                 className='btn btn-success hover:scale-110 transition delay-100 duration-300 ease-in-out cursor-pointer'
+                                 className='btn btn-sm text-xs btn-success hover:scale-110 transition delay-100 duration-300 ease-in-out cursor-pointer'
                               >
                                  <Icon path={mdiPlus} size={1} className='mr-1' />
                                  Create task
@@ -241,6 +250,44 @@ const TaskList: FC<pageProps> = ({ params }) => {
                               activeFilters={activeFilters}
                            ></FilterBar>
                         )}
+
+                        <div className='mt-6'>
+                           <label className='mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white'>
+                              Search
+                           </label>
+                           <div className='relative'>
+                              <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
+                                 <svg
+                                    aria-hidden='true'
+                                    className='w-5 h-5 text-gray-500 dark:text-gray-400'
+                                    fill='none'
+                                    stroke='currentColor'
+                                    viewBox='0 0 24 24'
+                                    xmlns='http://www.w3.org/2000/svg'
+                                 >
+                                    <path
+                                       strokeLinecap='round'
+                                       strokeLinejoin='round'
+                                       strokeWidth='2'
+                                       d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
+                                    ></path>
+                                 </svg>
+                              </div>
+                              <input
+                                 type='search'
+                                 id='default-search'
+                                 className='block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+                                 placeholder='Search Mockups, Logos...'
+                                 required
+                              />
+                              <button
+                                 type='submit'
+                                 className='text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+                              >
+                                 Search
+                              </button>
+                           </div>
+                        </div>
 
                         <hr className='h-px my-2 bg-gray-300 border-0 dark:bg-gray-700 mt-6 mb-10' />
 
