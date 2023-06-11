@@ -1,28 +1,21 @@
 import { FC } from "react";
-import { useRouter, usePathname } from "next/navigation";
 import Modal from "@/components/modal";
 import { useForm } from "react-hook-form";
 import { Datepicker, Input, initTE } from "tw-elements";
 initTE({ Datepicker, Input });
 
-import { TASKS } from "@/utils/calls";
-import { TASK } from "@/constants/constants";
-
 interface pageProps {
-   params: { listsId: string };
+   handleSubmit: Function;
    closeModal: Function;
 }
 
-const CreateTaskModal: FC<pageProps> = ({ closeModal, params }) => {
-   const router = useRouter();
-   const pathName = usePathname();
+const CreateTaskModal: FC<pageProps> = ({ closeModal, handleSubmit: handleCreateTask }) => {
    const {
       register,
       handleSubmit,
       formState: { errors },
    } = useForm();
-   const onSubmit = (data: object) =>
-      TASKS.create(params.listsId, { ...data, status: TASK.status.active });
+   const onSubmit = (data: object) => handleCreateTask(data);
 
    return (
       <Modal closeModal={closeModal} header='Create Task'>

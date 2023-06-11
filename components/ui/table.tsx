@@ -28,7 +28,9 @@ const Table: FC<pageProps> = ({ data, header }) => {
                   >
                      {header.map((cell) =>
                         cell?.component ? (
-                           <th key={JSON.stringify(cell)}>{cell.component(row.id)}</th>
+                           <th key={JSON.stringify(cell)}>
+                              {cell.component({ id: row.id, value: row[cell.key] })}
+                           </th>
                         ) : (
                            <td key={JSON.stringify(cell)}>{row[cell.key]}</td>
                         )
