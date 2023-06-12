@@ -26,7 +26,7 @@ const Table: FC<pageProps> = ({ data, header }) => {
                {data.map((row) => (
                   <tr
                      key={JSON.stringify(row)}
-                     className='hover:scale-105 transition delay-100 duration-200 ease-in-out hover:bg-gray-100 cursor-pointer'
+                     className='hover:scale-105 transition delay-100 duration-200 ease-in-out hover:bg-gray-100'
                   >
                      {header.map((cell) =>
                         cell?.component ? (
