@@ -323,9 +323,13 @@ const getTableHeader = (tableHeader, handleSetTaskAsDone, handleTaskDetail, hand
 const getFilters = (data: Task[]) => {
    const filterList = [];
 
+   const nameFilterList = [...new Set(data.map((value: Task) => value.name))].sort();
    const statusFilterList = [...new Set(data.map((value: Task) => value.status))].sort();
 
-   filterList.push({ key: "status", text: "Status", list: statusFilterList });
+   filterList.push(
+      { key: "status", text: "Status", list: statusFilterList },
+      { key: "name", text: "Name", list: nameFilterList }
+   );
 
    return filterList;
 };

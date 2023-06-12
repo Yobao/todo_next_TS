@@ -7,9 +7,14 @@ const FilterProvider = ({ children, data, activeFilters }) => {
 
    useEffect(() => {
       if (activeFilters) {
+         const filtersObject = Object.fromEntries(activeFilters);
+
          let tempFilter = data.filter((task) => {
-            return task.status === activeFilters.get("status").filter;
+            return Object.entries(filtersObject).every((key) => {
+               return task[key[0]] === activeFilters.get(key[0]).filter;
+            });
          });
+
          setFilteredData(tempFilter);
       } else {
          setFilteredData(data);

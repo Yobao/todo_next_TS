@@ -55,11 +55,7 @@ const FilterBar: FC<pageProps> = ({ filterList, handleFilters, activeFilters }) 
                      <li key={item}>
                         <a
                            onClick={() => handleFilters({ key: filter.key, filter: item })}
-                           className={`${
-                              activeFilters && activeFilters.get("status").filter === item
-                                 ? "bg-blue-200"
-                                 : ""
-                           }`}
+                           className={`${""}`}
                         >
                            {item}
                         </a>
