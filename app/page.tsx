@@ -17,7 +17,7 @@ export default function Home() {
    if (!data) return <LoadingButton />;
 
    return (
-      <div className='my-8 mx-8'>
+      <div className='py-8 px-8'>
          <Container horizontal={"left"}>
             <div className='flex-1'>
                <h2 className='text-4xl font-extrabold dark:text-white mx-4'>Todo Lists</h2>

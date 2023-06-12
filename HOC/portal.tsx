@@ -6,24 +6,16 @@ interface Props {
    children: any;
 }
 
-const Portal: React.FC<Props> = ({ children }) => {
-   const el = document.createElement("div");
-   const wrapper: React.RefObject<HTMLElement> = useRef(el);
+function Portal({ children }) {
+   const ref = useRef(null);
+   const [mounted, setMounted] = useState(false);
 
    useEffect(() => {
-      const current = wrapper.current as HTMLElement;
-      current.setAttribute("id", "overlay");
-      document.body.appendChild(current);
-
-      return () => {
-         document.body.removeChild(current);
-      };
+      setMounted(true);
+      return () => setMounted(false);
    }, []);
 
-   if (!wrapper.current) {
-      return <>{null}</>;
-   }
-   return createPortal(children, wrapper.current);
-};
+   return mounted ? createPortal(children, document.querySelector("#modal-root")) : null;
+}
 
 export default Portal;

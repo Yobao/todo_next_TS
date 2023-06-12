@@ -10,24 +10,33 @@ interface pageProps {
 
 const Table: FC<pageProps> = ({ data, header }) => {
    return (
-      <div className='overflow-x-auto'>
+      <div className=''>
          <table className='table'>
             <thead>
                <tr>
                   {header.map(({ key, text }) => (
-                     <th key={key}>{text}</th>
+                     <th key={key} className='text-center'>
+                        {text}
+                     </th>
                   ))}
                </tr>
             </thead>
 
             <tbody>
                {data.map((row) => (
-                  <tr key={JSON.stringify(row)}>
+                  <tr
+                     key={JSON.stringify(row)}
+                     className='hover:scale-105 transition delay-100 duration-200 ease-in-out hover:bg-gray-100 cursor-pointer'
+                  >
                      {header.map((cell) =>
                         cell?.component ? (
-                           <th key={JSON.stringify(cell)}>{cell.component(row[cell.key])}</th>
+                           <th key={JSON.stringify(cell)} className='text-center'>
+                              {cell.component({ id: row.id, value: row[cell.key] })}
+                           </th>
                         ) : (
-                           <td key={JSON.stringify(cell)}>{row[cell.key]}</td>
+                           <td key={JSON.stringify(cell)} className='text-center'>
+                              {row[cell.key]}
+                           </td>
                         )
                      )}
                   </tr>

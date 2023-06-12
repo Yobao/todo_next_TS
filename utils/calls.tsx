@@ -7,7 +7,15 @@ export const LISTS = {
 
 export const TASKS = {
    list: async (listId: string) => await requests.GET(`/lists/${listId}/tasks`),
-   create: async (slug: string) => await requests.POST(slug),
+
+   create: async (listId: string, body: object) =>
+      await requests.POST(`/lists/${listId}/tasks`, body),
+
+   update: async (listId: string, taskId: string, body: object) =>
+      await requests.PUT(`/lists/${listId}/tasks/${taskId}`, body),
+
    get: async (slug: string) => await requests.GET(slug),
-   delete: async (slug: string) => await requests.DELETE(slug),
+
+   delete: async (listId: string, taskId: string) =>
+      await requests.DELETE(`/lists/${listId}/tasks/${taskId}`),
 };
