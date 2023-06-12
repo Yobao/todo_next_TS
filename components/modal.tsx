@@ -1,8 +1,15 @@
 "use client";
-import React from "react";
+import React, { FC } from "react";
 import Portal from "@/HOC/portal";
 
-const Modal = ({ children, closeModal, header }) => {
+interface Modal {
+   children: any;
+   closeModal: Function;
+   header: string;
+   hasLine?: boolean;
+}
+
+const Modal: FC<Modal> = ({ children, closeModal, header, hasLine }) => {
    return (
       <Portal>
          <div
@@ -20,7 +27,7 @@ const Modal = ({ children, closeModal, header }) => {
                   </button>
                </div>
 
-               <hr className='h-px my-2 bg-gray-300 border-0 dark:bg-gray-700' />
+               {hasLine && <hr className='h-px my-2 bg-gray-300 border-0 dark:bg-gray-700' />}
 
                <div className='my-4'>{children}</div>
             </div>

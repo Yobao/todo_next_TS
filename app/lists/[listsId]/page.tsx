@@ -204,7 +204,7 @@ const TaskList: FC<pageProps> = ({ params }) => {
                      <div className=''>
                         <button
                            onClick={handleShowCreateModal}
-                           className='btn btn-sm text-xs btn-success hover:scale-110 transition delay-100 duration-300 ease-in-out cursor-pointer'
+                           className='btn btn-md text-xs btn-success hover:scale-110 transition delay-100 duration-300 ease-in-out cursor-pointer'
                         >
                            <Icon path={mdiPlus} size={1} className='mr-1' />
                            Create task

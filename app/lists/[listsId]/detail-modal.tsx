@@ -9,7 +9,7 @@ interface pageProps {
 
 const DetailModal: FC<pageProps> = ({ closeModal, data }) => {
    return (
-      <Modal closeModal={closeModal} header='Detail'>
+      <Modal closeModal={closeModal} header='Detail' hasLine>
          <p>{data.description}</p>
 
          <div className='mt-3 flex justify-between mt-8'>
