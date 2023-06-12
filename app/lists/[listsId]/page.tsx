@@ -7,8 +7,6 @@ import {
    mdiPlus,
    mdiCheckboxMarked,
    mdiCheckboxBlankOutline,
-   mdiFilter,
-   mdiFilterRemove,
 } from "@mdi/js";
 
 import Container from "@/components/container";
@@ -18,8 +16,9 @@ import CreateTaskModal from "./create-task-modal";
 import DeleteTaskModal from "./delete-task-modal";
 import FilterProvider from "@/components/filter-provider";
 import FilterBar from "@/components/filter-bar";
+import SearchBar from "@/components/search-bar";
 
-import { TASKS } from "@/utils/calls";
+import { TASKS, LISTS } from "@/utils/calls";
 import { Task } from "@/types";
 import { TASK } from "@/constants/constants";
 import { convertDate } from "@/utils/utils";
@@ -32,6 +31,12 @@ interface pageProps {
 interface TaskActions {
    id: string;
    value: string;
+}
+
+interface TableHeader {
+   key: string;
+   test: string;
+   component?: Function;
 }
 
 // @CONSTANTS
@@ -99,20 +104,25 @@ const tableHeader = [
 // @COMPONENT
 const TaskList: FC<pageProps> = ({ params }) => {
    const [data, setData] = useState<Task[]>();
+   const [listData, setListData] = useState();
    const [createModal, setCreateModal] = useState(false);
    const [deleteModal, setDeleteModal] = useState(false);
    const [detailModal, setDetailModal] = useState(false);
-   const [showFilterBar, setShowFilterBar] = useState(false);
    const [selectedTaskId, setSelectedTaskId] = useState();
-   const [activeFilters, setActiveFilters] = useState();
 
-   const handleDataLoad = useCallback(async () => {
+   const handleTaskListLoad = useCallback(async () => {
       const tasks = await TASKS.list(params.listsId);
       if (tasks) setData(tasks);
    }, []);
 
+   const handleListInfoLoad = useCallback(async () => {
+      const listInfo = await LISTS.get(params.listsId);
+      if (listInfo) setListData(listInfo);
+   }, []);
+
    useEffect(() => {
-      handleDataLoad();
+      handleListInfoLoad();
+      handleTaskListLoad();
    }, []);
 
    const handleSubmit = async (data: object) => {
@@ -122,7 +132,7 @@ const TaskList: FC<pageProps> = ({ params }) => {
       });
       if (taskCreated) {
          handleShowCreateModal();
-         handleDataLoad();
+         handleTaskListLoad();
       }
    };
 
@@ -139,13 +149,9 @@ const TaskList: FC<pageProps> = ({ params }) => {
       setDetailModal(!detailModal);
    };
 
-   const handleShowFilterBar = () => {
-      setShowFilterBar(!showFilterBar);
-   };
-
    const handleUpdateTask = async (taskId?: string) => {
       const updatedTask = await TASKS.update(params.listsId, taskId, { status: TASK.status.done });
-      if (updatedTask) handleDataLoad();
+      if (updatedTask) handleTaskListLoad();
    };
 
    const handleTaskDetail = (taskId?: string) => {
@@ -156,22 +162,9 @@ const TaskList: FC<pageProps> = ({ params }) => {
    const handleDeleteTask = async () => {
       const deletedTask = await TASKS.delete(params.listsId, selectedTaskId);
       if (deletedTask) {
-         handleDataLoad();
+         handleTaskListLoad();
          handleShowDeleteModal();
       }
-   };
-
-   const handleActiveFilters = (filters) => {
-      setActiveFilters((prevState) => {
-         const newState = new Map(prevState);
-         newState.set(filters.key, filters);
-         return newState;
-      });
-   };
-
-   const handleClearFilters = () => {
-      handleDataLoad();
-      setActiveFilters(undefined);
    };
 
    // @RENDER
@@ -206,95 +199,32 @@ const TaskList: FC<pageProps> = ({ params }) => {
 
          <div className='my-8 mx-8 z-1'>
             <Container>
-               <FilterProvider data={data} activeFilters={activeFilters}>
-                  {(filteredData) => (
-                     <div>
-                        <div className='flex flex-row justify-between'>
-                           <div className=''>
-                              <button
-                                 onClick={handleShowCreateModal}
-                                 className='btn btn-sm text-xs btn-success hover:scale-110 transition delay-100 duration-300 ease-in-out cursor-pointer'
-                              >
-                                 <Icon path={mdiPlus} size={1} className='mr-1' />
-                                 Create task
-                              </button>
-                           </div>
-
-                           <div className='flex flex-row'>
-                              {activeFilters && (
-                                 <div>
-                                    <button
-                                       onClick={handleClearFilters}
-                                       className='btn btn-sm hover:scale-110 transition delay-100 duration-300 ease-in-out cursor-pointer cursor-pointer'
-                                    >
-                                       <Icon path={mdiFilterRemove} size={1} className='mr-1' />
-                                    </button>
-                                 </div>
-                              )}
-
-                              <div className='ml-3'>
-                                 <button
-                                    onClick={handleShowFilterBar}
-                                    className='btn btn-sm hover:scale-110 transition delay-100 duration-300 ease-in-out cursor-pointer cursor-pointer'
-                                 >
-                                    <Icon path={mdiFilter} size={1} className='mr-1' />
-                                 </button>
-                              </div>
-                           </div>
-                        </div>
-
-                        {showFilterBar && (
-                           <FilterBar
-                              filterList={getFilters(data)}
-                              handleFilters={handleActiveFilters}
-                              activeFilters={activeFilters}
-                           ></FilterBar>
-                        )}
-
-                        <div className='mt-6'>
-                           <label className='mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white'>
-                              Search
-                           </label>
-                           <div className='relative'>
-                              <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
-                                 <svg
-                                    aria-hidden='true'
-                                    className='w-5 h-5 text-gray-500 dark:text-gray-400'
-                                    fill='none'
-                                    stroke='currentColor'
-                                    viewBox='0 0 24 24'
-                                    xmlns='http://www.w3.org/2000/svg'
-                                 >
-                                    <path
-                                       strokeLinecap='round'
-                                       strokeLinejoin='round'
-                                       strokeWidth='2'
-                                       d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
-                                    ></path>
-                                 </svg>
-                              </div>
-                              <input
-                                 type='search'
-                                 id='default-search'
-                                 className='block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
-                                 placeholder='Search Mockups, Logos...'
-                                 required
-                              />
-                              <button
-                                 type='submit'
-                                 className='text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
-                              >
-                                 Search
-                              </button>
-                           </div>
-                        </div>
-
-                        <hr className='h-px my-2 bg-gray-300 border-0 dark:bg-gray-700 mt-6 mb-10' />
-
-                        <Table header={tableHeaderWithAction} data={filteredData} />
+               <div>
+                  <div className='flex flex-row justify-end'>
+                     <div className=''>
+                        <button
+                           onClick={handleShowCreateModal}
+                           className='btn btn-md text-xs btn-success hover:scale-110 transition delay-100 duration-300 ease-in-out cursor-pointer'
+                        >
+                           <Icon path={mdiPlus} size={1} className='mr-1' />
+                           Create task
+                        </button>
                      </div>
-                  )}
-               </FilterProvider>
+                  </div>
+
+                  <FilterProvider data={data}>
+                     {(filteredData: Task[]) => (
+                        <>
+                           <FilterBar filterList={getFilters(data)} header={listData.name} />
+                           <SearchBar />
+
+                           <hr className='h-px my-2 bg-gray-300 border-0 dark:bg-gray-700 mt-6 mb-10' />
+
+                           <Table header={tableHeaderWithAction} data={filteredData} />
+                        </>
+                     )}
+                  </FilterProvider>
+               </div>
             </Container>
          </div>
       </>
@@ -302,7 +232,12 @@ const TaskList: FC<pageProps> = ({ params }) => {
 };
 
 // @HELPERS
-const getTableHeader = (tableHeader, handleSetTaskAsDone, handleTaskDetail, handleDeleteTask) => {
+const getTableHeader = (
+   tableHeader: TableHeader,
+   handleSetTaskAsDone,
+   handleTaskDetail,
+   handleDeleteTask
+) => {
    const header = [...tableHeader];
 
    const TASK_ACITON_MAP = new Map();
@@ -313,7 +248,6 @@ const getTableHeader = (tableHeader, handleSetTaskAsDone, handleTaskDetail, hand
 
    header.forEach((cell) => {
       const cellAction = TASK_ACITON_MAP.get(cell.key);
-
       cellAction && (cell.action = cellAction);
    });
 

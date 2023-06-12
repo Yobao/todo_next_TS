@@ -8,7 +8,7 @@ interface pageProps {
 
 const DeleteTaskModal: FC<pageProps> = ({ closeModal, action }) => {
    return (
-      <Modal closeModal={closeModal} header='Delete Task'>
+      <Modal closeModal={closeModal} header='Delete Task' hasLine>
          <p>Are you sure you want to delete task ?</p>
 
          <div className='mt-3 flex justify-between mt-8'>
