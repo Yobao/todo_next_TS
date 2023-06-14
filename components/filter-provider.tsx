@@ -1,11 +1,28 @@
 import { FC, useState, useMemo, createContext } from "react";
 
-export const FilterContext = createContext(null);
+type Props = {
+   children: any;
+   data: any;
+};
 
-const FilterProvider: FC<any> = ({ children, data }) => {
+interface Filter {
+   key: string;
+   text: string;
+   list: string[];
+}
+
+interface FilterContext {
+   handleFilter: Function;
+   filters: Filter[];
+   Provider: any;
+}
+
+export const FilterContext = createContext<FilterContext | null>(null);
+
+const FilterProvider: FC<Props> = ({ children, data }) => {
    const [filterMap, setFilterMap] = useState(new Map());
 
-   const handleFilter = (filter: any) => {
+   const handleFilter = (filter: Filter) => {
       if (!filter) {
          setFilterMap(new Map());
       } else {
@@ -38,9 +55,9 @@ const FilterProvider: FC<any> = ({ children, data }) => {
          }
 
          if (filterMap.size) {
-            newData = data.filter((task: any) => {
+            newData = data.filter((item: any) => {
                return Object.entries(filtersObject).every((key) => {
-                  return task[key[0]] === filterMap.get(key[0]).filter;
+                  return item[key[0]] === filterMap.get(key[0]).filter;
                });
             });
          }

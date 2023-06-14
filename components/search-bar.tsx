@@ -1,7 +1,7 @@
 import { FC, useState, useContext } from "react";
 import { FilterContext } from "./filter-provider";
 
-const SearchBar: FC<pageProps> = () => {
+const SearchBar = () => {
    const { handleFilter } = useContext(FilterContext);
    const [searchBarValue, setSearchBarValue] = useState("");
 

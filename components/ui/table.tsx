@@ -1,10 +1,10 @@
 "use client";
 import { FC } from "react";
 
-import { Task, TaskTableHeader } from "@/types";
+import { TaskTableHeader } from "@/types";
 
 interface pageProps {
-   data: Task[];
+   data: any;
    header: TaskTableHeader[];
 }
 
@@ -23,7 +23,7 @@ const Table: FC<pageProps> = ({ data, header }) => {
             </thead>
 
             <tbody>
-               {data.map((row) => (
+               {data.map((row: any) => (
                   <tr
                      key={JSON.stringify(row)}
                      className='hover:scale-105 transition delay-100 duration-200 ease-in-out hover:bg-gray-100'
@@ -31,7 +31,10 @@ const Table: FC<pageProps> = ({ data, header }) => {
                      {header.map((cell) =>
                         cell?.component ? (
                            <th key={JSON.stringify(cell)} className='text-center'>
-                              {cell.component({ id: row.id, value: row[cell.key] })}
+                              {cell.component({
+                                 id: row.id,
+                                 value: row[cell.key],
+                              })}
                            </th>
                         ) : (
                            <td key={JSON.stringify(cell)} className='text-center'>

@@ -14,7 +14,12 @@ export default function Home() {
       LISTS.list().then((data) => setData(data));
    }, []);
 
-   if (!data) return <LoadingButton />;
+   if (!data)
+      return (
+         <Container>
+            <LoadingButton />
+         </Container>
+      );
 
    return (
       <div className='py-8 px-8'>

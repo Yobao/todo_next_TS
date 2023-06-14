@@ -19,7 +19,7 @@ import FilterBar from "@/components/filter-bar";
 import SearchBar from "@/components/search-bar";
 
 import { TASKS, LISTS } from "@/utils/calls";
-import { Task } from "@/types";
+import { Task, TaskTableHeader, TaskActions, List } from "@/types";
 import { TASK } from "@/constants/constants";
 import { convertDate } from "@/utils/utils";
 import DetailModal from "./detail-modal";
@@ -28,23 +28,13 @@ interface pageProps {
    params: { listsId: string };
 }
 
-interface TaskActions {
-   id: string;
-   value: string;
-}
-
-interface TableHeader {
-   key: string;
-   test: string;
-   component?: Function;
-}
-
 // @CONSTANTS
 const tableHeader = [
    {
       key: "status",
       text: "Set as done",
       component: function (data: TaskActions) {
+         /*          console.log(data); */
          return (
             <button
                onClick={() => this.action(data.id)}
@@ -88,7 +78,7 @@ const tableHeader = [
    {
       key: "delete",
       text: "Delete",
-      component: function (data: string) {
+      component: function (data: TaskActions) {
          return (
             <button
                onClick={() => this.action(data.id)}
@@ -104,11 +94,11 @@ const tableHeader = [
 // @COMPONENT
 const TaskList: FC<pageProps> = ({ params }) => {
    const [data, setData] = useState<Task[]>();
-   const [listData, setListData] = useState();
+   const [listData, setListData] = useState<List>();
    const [createModal, setCreateModal] = useState(false);
    const [deleteModal, setDeleteModal] = useState(false);
    const [detailModal, setDetailModal] = useState(false);
-   const [selectedTaskId, setSelectedTaskId] = useState();
+   const [selectedTaskId, setSelectedTaskId] = useState<string>("");
 
    const handleTaskListLoad = useCallback(async () => {
       const tasks = await TASKS.list(params.listsId);
@@ -141,7 +131,7 @@ const TaskList: FC<pageProps> = ({ params }) => {
    }, [createModal]);
 
    const handleShowDeleteModal = (taskId?: string) => {
-      setSelectedTaskId(taskId);
+      setSelectedTaskId(taskId!);
       setDeleteModal(!deleteModal);
    };
 
@@ -150,12 +140,12 @@ const TaskList: FC<pageProps> = ({ params }) => {
    };
 
    const handleUpdateTask = async (taskId?: string) => {
-      const updatedTask = await TASKS.update(params.listsId, taskId, { status: TASK.status.done });
+      const updatedTask = await TASKS.update(params.listsId, taskId!, { status: TASK.status.done });
       if (updatedTask) handleTaskListLoad();
    };
 
    const handleTaskDetail = (taskId?: string) => {
-      setSelectedTaskId(taskId);
+      setSelectedTaskId(taskId!);
       handleShowDetailModal();
    };
 
@@ -168,7 +158,12 @@ const TaskList: FC<pageProps> = ({ params }) => {
    };
 
    // @RENDER
-   if (!data) return <LoadingButton />;
+   if (!data)
+      return (
+         <Container>
+            <LoadingButton />
+         </Container>
+      );
 
    const tableHeaderWithAction = getTableHeader(
       tableHeader,
@@ -183,11 +178,7 @@ const TaskList: FC<pageProps> = ({ params }) => {
             <CreateTaskModal closeModal={handleShowCreateModal} handleSubmit={handleSubmit} />
          )}
          {deleteModal && (
-            <DeleteTaskModal
-               closeModal={handleShowDeleteModal}
-               params={params}
-               action={handleDeleteTask}
-            />
+            <DeleteTaskModal closeModal={handleShowDeleteModal} action={handleDeleteTask} />
          )}
 
          {detailModal && (
@@ -215,7 +206,7 @@ const TaskList: FC<pageProps> = ({ params }) => {
                   <FilterProvider data={data}>
                      {(filteredData: Task[]) => (
                         <>
-                           <FilterBar filterList={getFilters(data)} header={listData.name} />
+                           <FilterBar filterList={getFilters(data)} header={listData!.name} />
                            <SearchBar />
 
                            <hr className='h-px my-2 bg-gray-300 border-0 dark:bg-gray-700 mt-6 mb-10' />
@@ -233,10 +224,10 @@ const TaskList: FC<pageProps> = ({ params }) => {
 
 // @HELPERS
 const getTableHeader = (
-   tableHeader: TableHeader,
-   handleSetTaskAsDone,
-   handleTaskDetail,
-   handleDeleteTask
+   tableHeader: TaskTableHeader[],
+   handleSetTaskAsDone: Function,
+   handleTaskDetail: Function,
+   handleDeleteTask: Function
 ) => {
    const header = [...tableHeader];
 

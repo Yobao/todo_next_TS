@@ -13,8 +13,20 @@ export interface Task {
    status: string;
 }
 
+export interface CreateTaskForm {
+   taskName: string;
+   dueDate: Date;
+   description: string;
+}
+
 export interface TaskTableHeader {
    key: string;
    text: string;
-   component?: any;
+   component?: Function;
+   action?: Function;
+}
+
+export interface TaskActions {
+   id: string;
+   value: string;
 }

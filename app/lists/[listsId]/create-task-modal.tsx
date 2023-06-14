@@ -1,12 +1,11 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 
-import Icon from "@mdi/react";
-import { mdiCalendar } from "@mdi/js";
-import { useForm } from "react-hook-form";
-import { format } from "date-fns";
-import { DayPicker } from "react-day-picker";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import "react-day-picker/dist/style.css";
 
+import { CreateTaskForm } from "@/types";
 import Modal from "@/components/modal";
 
 interface pageProps {
@@ -14,58 +13,30 @@ interface pageProps {
    closeModal: Function;
 }
 
+const formSchema = z.object({
+   taskName: z.string().min(1, "Task name is required").max(50),
+   dueDate: z.coerce.date(),
+   description: z.string().min(1, "Description is required").max(200),
+});
+
+type FormSchemaType = z.infer<typeof formSchema>;
+
 const CreateTaskModal: FC<pageProps> = ({ closeModal, handleSubmit: handleCreateTask }) => {
    const {
       register,
       handleSubmit,
       formState: { errors },
-   } = useForm();
+   } = useForm<FormSchemaType>({ resolver: zodResolver(formSchema) });
 
-   const onSubmit = (data: object) => {
-      const msDate = new Date(selected).getTime().toString();
-      const newData = { ...data, dueDate: msDate.slice(0, msDate.length - 3) };
+   const onSubmit: SubmitHandler<FormSchemaType> = (data: CreateTaskForm) => {
+      const newDate = new Date(data.dueDate);
+      const newData = { ...data, dueDate: Math.floor(newDate.getTime() / 1000) };
       handleCreateTask(newData);
    };
-
-   const [showCalendar, setShowCalendar] = useState(false);
-   const [selected, setSelected] = useState<Date>();
-
-   const handleShowCalendar = () => {
-      setShowCalendar(!showCalendar);
-   };
-
-   let footer = <p>Please pick a day.</p>;
-   if (selected) {
-      footer = <p>You picked {format(selected, "PP")}.</p>;
-   }
 
    return (
       <>
          <Modal closeModal={closeModal} header='Create Task' hasLine>
-            {showCalendar && (
-               <Modal closeModal={handleShowCalendar}>
-                  <div className='flex flex-col items-center'>
-                     <DayPicker
-                        mode='single'
-                        selected={selected}
-                        onSelect={setSelected}
-                        footer={footer}
-                     />
-                  </div>
-
-                  <div className='flex flex-row justify-end mx-4'>
-                     <button
-                        className='btn btn-info hover:scale-110 transition delay-100 duration-300 ease-in-out cursor-pointer'
-                        onClick={() => {
-                           handleShowCalendar();
-                        }}
-                     >
-                        OK
-                     </button>
-                  </div>
-               </Modal>
-            )}
-
             <form
                onSubmit={handleSubmit(onSubmit)}
                className='flex flex-col items-left justify-center mx-auto mt-4'
@@ -75,34 +46,31 @@ const CreateTaskModal: FC<pageProps> = ({ closeModal, handleSubmit: handleCreate
                      Name
                   </label>
                   <input
-                     {...register("name")}
+                     type='text'
+                     id='taskName'
+                     {...register("taskName")}
                      className='input input-bordered input-md w-2/3 max-w-xs'
                      placeholder='Task name'
                   />
+                  {errors.taskName && (
+                     <span className='text-red-400 block mt-2'>{errors.taskName?.message}</span>
+                  )}
                </div>
 
                <div className='mb-6'>
                   <label className='block mb-2 text-md font-medium text-gray-900 dark:text-white'>
                      Due date
                   </label>
-
-                  <div className='input-group'>
-                     <button className='btn btn-square' type='button' onClick={handleShowCalendar}>
-                        <Icon
-                           path={mdiCalendar}
-                           size={1}
-                           className='mr-1 cursor-pointer'
-                           color={"#b22e01"}
-                        />
-                     </button>
-
-                     <input
-                        {...register("dueDate")}
-                        className='input input-bordered input-md w-2/3 max-w-xs'
-                        placeholder='Due date'
-                        value={selected ? format(selected, "PP") : ""}
-                     />
-                  </div>
+                  <input
+                     type='date'
+                     id='dueDate'
+                     className='input input-bordered input-md w-2/3 max-w-xs'
+                     placeholder='Due date'
+                     {...register("dueDate")}
+                  />
+                  {errors.dueDate && (
+                     <span className='text-red-400 block mt-2'>{errors.dueDate?.message}</span>
+                  )}
                </div>
 
                <div className='mb-6'>
@@ -114,12 +82,16 @@ const CreateTaskModal: FC<pageProps> = ({ closeModal, handleSubmit: handleCreate
                      placeholder='Bio'
                      className='textarea textarea-bordered textarea-sm w-2/3 '
                   ></textarea>
+
+                  {errors.description && (
+                     <span className='text-red-400 block mt-2'>{errors.description?.message}</span>
+                  )}
                </div>
 
                <div className='mt-3 flex justify-between'>
                   <button
                      className='btn hover:scale-110 transition delay-100 duration-300 ease-in-out cursor-pointer'
-                     onClick={closeModal}
+                     onClick={() => closeModal()}
                   >
                      Close
                   </button>
