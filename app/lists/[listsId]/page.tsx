@@ -183,7 +183,7 @@ const TaskList: FC<pageProps> = ({ params }) => {
          {detailModal && (
             <DetailModal
                closeModal={handleShowDetailModal}
-               data={data.find((task) => task.id === selectedTaskId)}
+               data={data?.find((task) => task.id === selectedTaskId)}
             />
          )}
 
@@ -202,18 +202,20 @@ const TaskList: FC<pageProps> = ({ params }) => {
                      </div>
                   </div>
 
-                  <FilterProvider data={data}>
-                     {(filteredData: Task[]) => (
-                        <>
-                           <FilterBar filterList={getFilters(data)} header={listData!.name} />
-                           <SearchBar />
+                  {data && (
+                     <FilterProvider data={data}>
+                        {(filteredData: Task[]) => (
+                           <>
+                              <FilterBar filterList={getFilters(data)} header={listData!.name} />
+                              <SearchBar />
 
-                           <hr className='h-px my-2 bg-gray-300 border-0 dark:bg-gray-700 mt-6 mb-10' />
+                              <hr className='h-px my-2 bg-gray-300 border-0 dark:bg-gray-700 mt-6 mb-10' />
 
-                           <Table header={tableHeaderWithAction} data={filteredData} />
-                        </>
-                     )}
-                  </FilterProvider>
+                              <Table header={tableHeaderWithAction} data={filteredData} />
+                           </>
+                        )}
+                     </FilterProvider>
+                  )}
                </div>
             </Container>
          </div>
