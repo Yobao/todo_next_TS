@@ -157,7 +157,7 @@ const TaskList: FC<pageProps> = ({ params }) => {
    };
 
    // @RENDER
-   if (!data)
+   if (!data && !listData)
       return (
          <Container>
             <LoadingButton />
