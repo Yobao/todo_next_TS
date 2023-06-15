@@ -20,7 +20,7 @@ const Modal: FC<Modal> = ({ children, closeModal, header, hasLine }) => {
                <div className='flex flex-row my-4'>
                   <h2 className='text-2xl font-bold dark:text-white'>{header}</h2>
                   <button
-                     onClick={closeModal}
+                     onClick={() => closeModal()}
                      className='btn btn-lg btn-circle btn-ghost absolute right-2 top-4'
                   >
                      ✕

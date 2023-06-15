@@ -1,12 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { FC } from "react";
 
-export default function Card({ children, ...props }) {
+type Props = {
+   children: JSX.Element;
+   title: string;
+   onClick: Function;
+};
+
+export default function Card({ children, ...props }: Props) {
    const { title, onClick } = props;
 
    return (
       <div
-         onClick={onClick}
+         onClick={() => onClick()}
          className='card flex-1 bg-base-100 flex-grow shadow-xl m-4 hover:scale-110 transition delay-150 duration-300 ease-in-out cursor-pointer'
       >
          <div className='card-body'>

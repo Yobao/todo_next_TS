@@ -29,15 +29,14 @@ interface pageProps {
 }
 
 // @CONSTANTS
-const tableHeader = [
+const tableHeader: TaskTableHeader[] = [
    {
       key: "status",
       text: "Set as done",
       component: function (data: TaskActions) {
-         /*          console.log(data); */
          return (
             <button
-               onClick={() => this.action(data.id)}
+               onClick={() => this.action!(data.id)}
                className='hover:scale-125 transition delay-100 duration-300 ease-in-out cursor-pointer'
             >
                <Icon
@@ -67,7 +66,7 @@ const tableHeader = [
       component: function (data: TaskActions) {
          return (
             <button
-               onClick={() => this.action(data.id)}
+               onClick={() => this.action!(data.id)}
                className='bg-red hover:scale-125 transition delay-100 duration-300 ease-in-out cursor-pointer'
             >
                <Icon path={mdiMagnify} size={1} className='mr-1' />
@@ -81,7 +80,7 @@ const tableHeader = [
       component: function (data: TaskActions) {
          return (
             <button
-               onClick={() => this.action(data.id)}
+               onClick={() => this.action!(data.id)}
                className='hover:scale-125 transition delay-100 duration-300 ease-in-out cursor-pointer'
             >
                <Icon path={mdiDelete} size={1} className='mr-1' color={"#b22e01"} />

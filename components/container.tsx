@@ -2,7 +2,7 @@
 import React from "react";
 
 type Props = {
-   children: string | JSX.Element | JSX.Element[];
+   children: JSX.Element;
    horizontal?: string;
 };
 
@@ -13,7 +13,7 @@ function Container({ children, horizontal }: Props) {
             horizontal ?? "center"
          } mx-auto`}
       >
-         {React.cloneElement(children, { ...children.props })}
+         {children}
       </div>
    );
 }

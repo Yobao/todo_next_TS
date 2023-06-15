@@ -15,16 +15,16 @@ interface pageProps {
 }
 
 const FilterBar: FC<pageProps> = ({ filterList, header }) => {
-   const { filters, handleFilter } = useContext(FilterContext);
+   const filterContext = useContext(FilterContext);
    const [showFilters, setShowFilters] = useState(false);
 
    const filterArray = useMemo(
-      () => Array.from(filters.values()).map((item: any) => item.filter),
-      [filters]
+      () => Array.from(filterContext!.filters.values()).map((item: any) => item.filter),
+      [filterContext]
    );
 
    const handleClearFilters = () => {
-      handleFilter(null);
+      filterContext!.handleFilter(null);
    };
 
    const handleShowFilterBar = () => {
@@ -39,7 +39,7 @@ const FilterBar: FC<pageProps> = ({ filterList, header }) => {
             </div>
 
             <div className='flex flex-row justify-end'>
-               {filters.size > 0 && (
+               {filterContext!.filters.size > 0 && (
                   <div>
                      <button
                         onClick={handleClearFilters}
@@ -97,7 +97,9 @@ const FilterBar: FC<pageProps> = ({ filterList, header }) => {
                         {filter.list.map((item: string) => (
                            <li key={item}>
                               <a
-                                 onClick={() => handleFilter({ key: filter.key, filter: item })}
+                                 onClick={() =>
+                                    filterContext!.handleFilter({ key: filter.key, filter: item })
+                                 }
                                  className={filterArray.includes(item) ? "bg-blue-200" : ""}
                               >
                                  {item}
