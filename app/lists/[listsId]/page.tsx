@@ -202,7 +202,7 @@ const TaskList: FC<pageProps> = ({ params }) => {
                      </div>
                   </div>
 
-                  {data && (
+                  {data && listData && (
                      <FilterProvider data={data}>
                         {(filteredData: Task[]) => (
                            <>
