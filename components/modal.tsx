@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import Portal from "@/HOC/portal";
 
 interface Modal {
-   children: any;
+   children: JSX.Element;
    closeModal: Function;
    header: string;
    hasLine?: boolean;

@@ -1,13 +1,12 @@
 "use client";
-import { FC, useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 interface Props {
-   children: any;
+   children: JSX.Element;
 }
 
-function Portal({ children }) {
-   const ref = useRef(null);
+const Portal = ({ children }: Props) => {
    const [mounted, setMounted] = useState(false);
 
    useEffect(() => {
@@ -15,7 +14,7 @@ function Portal({ children }) {
       return () => setMounted(false);
    }, []);
 
-   return mounted ? createPortal(children, document.querySelector("#modal-root")) : null;
-}
+   return mounted ? createPortal(children, document.body) : null;
+};
 
 export default Portal;

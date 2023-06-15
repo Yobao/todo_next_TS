@@ -4,7 +4,7 @@ import { FC } from "react";
 import { TaskTableHeader } from "@/types";
 
 interface pageProps {
-   data: any;
+   data: any[];
    header: TaskTableHeader[];
 }
 
@@ -23,7 +23,7 @@ const Table: FC<pageProps> = ({ data, header }) => {
             </thead>
 
             <tbody>
-               {data.map((row: any) => (
+               {data.map((row) => (
                   <tr
                      key={JSON.stringify(row)}
                      className='hover:scale-105 transition delay-100 duration-200 ease-in-out hover:bg-gray-100'

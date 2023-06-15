@@ -18,10 +18,9 @@ const FilterBar: FC<pageProps> = ({ filterList, header }) => {
    const filterContext = useContext(FilterContext);
    const [showFilters, setShowFilters] = useState(false);
 
-   const filterArray = useMemo(
-      () => Array.from(filterContext!.filters.values()).map((item: any) => item.filter),
-      [filterContext]
-   );
+   const filterArray: string[] = useMemo(() => {
+      return Array.from(filterContext!.filters.values()).map((item) => item.filter);
+   }, [filterContext]);
 
    const handleClearFilters = () => {
       filterContext!.handleFilter(null);
@@ -94,7 +93,7 @@ const FilterBar: FC<pageProps> = ({ filterList, header }) => {
                         tabIndex={0}
                         className='dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52'
                      >
-                        {filter.list.map((item: string) => (
+                        {filter.list.map((item) => (
                            <li key={item}>
                               <a
                                  onClick={() =>

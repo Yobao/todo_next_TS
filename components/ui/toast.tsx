@@ -1,19 +1,29 @@
-import { FC } from "react";
-
-type ToastEnum = "info" | "success" | "warning" | "error";
+import { FC, useState, useEffect } from "react";
 
 interface pageProps {
    text: string;
-   type: ToastEnum;
 }
 
-const Toast: FC<pageProps> = ({ text, type }) => {
+const Toast: FC<pageProps> = ({ text }) => {
+   const [showToast, setShowToast] = useState(true);
+
+   useEffect(() => {
+      const timer = setTimeout(() => {
+         setShowToast(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+   }, []);
+
    return (
-      <div className='toast toast-center toast-middle'>
-         <div className={`alert alert-${type}`}>
-            <span>{text}</span>
-         </div>
-      </div>
+      <>
+         {showToast && (
+            <div className='toast toast-center toast-middle z-50 w-96 justify-center items-center'>
+               <div className='alert alert-info'>
+                  <span>{text}</span>
+               </div>
+            </div>
+         )}
+      </>
    );
 };
 

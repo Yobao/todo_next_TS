@@ -1,20 +1,20 @@
 import { FC, useState, useMemo, createContext } from "react";
 
 type Props = {
-   children: any;
-   data: any;
+   children: CallableFunction;
+   data: any[];
 };
 
-interface Filter {
+export interface Filter {
    key: string;
    text: string;
    list: string[];
+   filter: string;
 }
 
 interface FilterContext {
    handleFilter: Function;
-   filters: Filter[];
-   Provider: any;
+   filters: Map<string, Filter>;
 }
 
 export const FilterContext = createContext<FilterContext | null>(null);
@@ -46,7 +46,7 @@ const FilterProvider: FC<Props> = ({ children, data }) => {
                .replace(/[\u0300-\u036f]/g, "");
             const re = new RegExp(rawValue, "gi");
 
-            newData = data.filter((item: any) => {
+            newData = data.filter((item) => {
                const rawName = item.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                return rawName.match(re);
             });
@@ -55,7 +55,7 @@ const FilterProvider: FC<Props> = ({ children, data }) => {
          }
 
          if (filterMap.size) {
-            newData = data.filter((item: any) => {
+            newData = data.filter((item) => {
                return Object.entries(filtersObject).every((key) => {
                   return item[key[0]] === filterMap.get(key[0]).filter;
                });

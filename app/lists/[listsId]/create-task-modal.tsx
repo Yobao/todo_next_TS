@@ -35,76 +35,74 @@ const CreateTaskModal: FC<pageProps> = ({ closeModal, handleSubmit: handleCreate
    };
 
    return (
-      <>
-         <Modal closeModal={closeModal} header='Create Task' hasLine>
-            <form
-               onSubmit={handleSubmit(onSubmit)}
-               className='flex flex-col items-left justify-center mx-auto mt-4'
-            >
-               <div className='mb-6'>
-                  <label className='block mb-2 text-md font-medium text-gray-900 dark:text-white'>
-                     Name
-                  </label>
-                  <input
-                     type='text'
-                     id='taskName'
-                     {...register("taskName")}
-                     className='input input-bordered input-md w-2/3 max-w-xs'
-                     placeholder='Task name'
-                  />
-                  {errors.taskName && (
-                     <span className='text-red-400 block mt-2'>{errors.taskName?.message}</span>
-                  )}
-               </div>
+      <Modal closeModal={closeModal} header='Create Task' hasLine>
+         <form
+            onSubmit={handleSubmit(onSubmit)}
+            className='flex flex-col items-left justify-center mx-auto mt-4'
+         >
+            <div className='mb-6'>
+               <label className='block mb-2 text-md font-medium text-gray-900 dark:text-white'>
+                  Name
+               </label>
+               <input
+                  type='text'
+                  id='taskName'
+                  {...register("taskName")}
+                  className='input input-bordered input-md w-2/3 max-w-xs'
+                  placeholder='Task name'
+               />
+               {errors.taskName && (
+                  <span className='text-red-400 block mt-2'>{errors.taskName?.message}</span>
+               )}
+            </div>
 
-               <div className='mb-6'>
-                  <label className='block mb-2 text-md font-medium text-gray-900 dark:text-white'>
-                     Due date
-                  </label>
-                  <input
-                     type='date'
-                     id='dueDate'
-                     className='input input-bordered input-md w-2/3 max-w-xs'
-                     placeholder='Due date'
-                     {...register("dueDate")}
-                  />
-                  {errors.dueDate && (
-                     <span className='text-red-400 block mt-2'>{errors.dueDate?.message}</span>
-                  )}
-               </div>
+            <div className='mb-6'>
+               <label className='block mb-2 text-md font-medium text-gray-900 dark:text-white'>
+                  Due date
+               </label>
+               <input
+                  type='date'
+                  id='dueDate'
+                  className='input input-bordered input-md w-2/3 max-w-xs'
+                  placeholder='Due date'
+                  {...register("dueDate")}
+               />
+               {errors.dueDate && (
+                  <span className='text-red-400 block mt-2'>{errors.dueDate?.message}</span>
+               )}
+            </div>
 
-               <div className='mb-6'>
-                  <label className='block mb-2 text-md font-medium text-gray-900 dark:text-white'>
-                     Description
-                  </label>
-                  <textarea
-                     {...register("description")}
-                     placeholder='Bio'
-                     className='textarea textarea-bordered textarea-sm w-2/3 '
-                  ></textarea>
+            <div className='mb-6'>
+               <label className='block mb-2 text-md font-medium text-gray-900 dark:text-white'>
+                  Description
+               </label>
+               <textarea
+                  {...register("description")}
+                  placeholder='Bio'
+                  className='textarea textarea-bordered textarea-sm w-2/3 '
+               ></textarea>
 
-                  {errors.description && (
-                     <span className='text-red-400 block mt-2'>{errors.description?.message}</span>
-                  )}
-               </div>
+               {errors.description && (
+                  <span className='text-red-400 block mt-2'>{errors.description?.message}</span>
+               )}
+            </div>
 
-               <div className='mt-3 flex justify-between'>
-                  <button
-                     className='btn hover:scale-110 transition delay-100 duration-300 ease-in-out cursor-pointer'
-                     onClick={() => closeModal()}
-                  >
-                     Close
-                  </button>
+            <div className='mt-3 flex justify-between'>
+               <button
+                  className='btn hover:scale-110 transition delay-100 duration-300 ease-in-out cursor-pointer'
+                  onClick={() => closeModal()}
+               >
+                  Close
+               </button>
 
-                  <input
-                     type='submit'
-                     value='Create task'
-                     className='btn btn-success hover:scale-110 transition delay-100 duration-300 ease-in-out cursor-pointer'
-                  />
-               </div>
-            </form>
-         </Modal>
-      </>
+               <input
+                  type='submit'
+                  value='Create task'
+                  className='btn btn-success hover:scale-110 transition delay-100 duration-300 ease-in-out cursor-pointer'
+               />
+            </div>
+         </form>
+      </Modal>
    );
 };
 
